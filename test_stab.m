@@ -132,14 +132,14 @@ for l = 1 : length(e(1, 1, :))
         x{l} = [x{l}, j * ones(1, length(f))];
     end
 end
-
+%%
 % Comparison with path based approach: The latter approach yields indeed 
 % the least conservatism
 figure
 hold on; box on
 scatter(x{1}, y{1}, 'o', 'LineWidth', 1); 
-scatter(x{2}, y{2}, 'o') % Essentially identical to the above
-scatter(x{4}, y{4}, 'o') % Essentially identical to the above
+%scatter(x{2}, y{2}, 'o') % Essentially identical to the above
+%scatter(x{4}, y{4}, 'o') % Essentially identical to the above
 scatter(x{3}, y{3}, '*')
 legend('Theorem 2.3, 2.6 & 2.16', 'Theorem 2.5')
 
@@ -155,8 +155,8 @@ ylabel('\beta')
 figure
 hold on; box on
 scatter(x{1}, y{1}, 'o', 'LineWidth', 1); 
-scatter(x{2}, y{2}, 'o') % Essentially identical to the above
-scatter(x{4}, y{4}, 'o') % Essentially identical to the above
+%scatter(x{2}, y{2}, 'o') % Essentially identical to the above
+%scatter(x{4}, y{4}, 'o') % Essentially identical to the above
 scatter(x{5}, y{5}, '*')
 legend('Theorem 2.3, 2.6 & 2.16', 'Theorem 2.13')
 
