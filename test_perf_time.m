@@ -137,11 +137,11 @@ for t = 1 : length(T)
     psi = basis_filter(nu, 2, sampling_time=sysI.Ts, pole=0, type=2);
     tic;
     for i = 1 : 20
-        %ana_perf_iqc(clw, T{t}, 1, psi=psi);
+        ana_perf_iqc(clw, T{t}, 1, psi=psi);
         %ana_perf_clock(sysF, sysJ, T{t});
-        ana_perf_clock_sv(sysF, sysJ, T{t});
+        %ana_perf_clock_sv(sysF, sysJ, T{t});
     end
-    AT(6, t) = toc;
+    AT(nu, t) = toc;
 end
 
 save('AT.mat', 'AT')
