@@ -1,6 +1,6 @@
 # IQC Based Analysis and Estimator Design for Discrete-Time Systems Affected by Impulsive Uncertainties
 
-
+[![DOI](https://zenodo.org/badge/579757780.svg)](https://zenodo.org/badge/latestdoi/579757780)
 [![The MIT License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/TobiasHolicki/IQCs-for-Discrete-Time-Impulsive-Uncertainties/blob/main/LICENSE.md)
 
 
