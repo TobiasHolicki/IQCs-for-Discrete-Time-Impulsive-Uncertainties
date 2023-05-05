@@ -94,7 +94,51 @@ psi = basis_filter(1, 2*out(1), pole=0, type=2, sampling_time = Ts);
 disp(['Upper bound by IQC and lifting approach : ', num2str(ga)])
 
 
-%% Simulation
+%% Simulation 1
+      
+rng default;              % For reproducibility
+dt = randi(T, 12, 1);     % Generate random dwell-times
+t  = cumsum([-1; dt+1]);  % Sequence of impulse instants
+E  = {Eiqc, Esvar, Enom}; % Cell of synthesized estimators
+ee = cell(2, 1);          % Cell for estimation errors
+
+% Several simulations
+for k = 1 : length(E)
+    % Build closed-loop
+    cl = lft(sys, E{k});
+    for j = 1 : 2
+        x = zeros(size(cl.a, 2), 1);  % Zero initial condition
+        d = @(i) fun(i, j);           % Generalized disturbance
+        e = zeros(le, t(end));        % Estimation error
+        % Simulate response
+        for i = 1 : t(end)
+            % Currently active system
+            if ~ismember(i, t) % Then the flow component is active
+                sya     = lft(zeros(inp(1)), cl);   
+            else % Then the jump component is active 
+                sya     = lft(eye(inp(1)), cl);
+            end
+            e(:, i) = sya.c * x + sya.d * d(i); % Update perf. output
+            x       = sya.a * x + sya.b * d(i); % Update state
+        end
+        ee{j}(k, :) = e;
+    end
+end
+
+% Plot results
+figure
+subplot(3, 1, 1:2)
+box on; grid on;
+semilogy(1:t(end), abs(ee{2}), 'linewidth', 1.5)
+%legend('Thm 3.3', 'Thm 3.4', 'hinfsyn')
+xlabel('time')
+ylabel('Estimation error |v-u|')
+ylim([1e-3, 1e1])
+xlim([0, 120])
+
+
+
+%% Simulation 2
 
 % A modification of the open-loop system whose error signal is the stacked
 % estimate and the to-be-estimated output. This is only for plotting the 
@@ -105,21 +149,17 @@ sysm = ss(A, [AJ - A, BJ - B, B, zeros(lx, le)], ...
           zeros(le, lx+2*ld), eye(le); ...
           CJ - C, DJ - D, D, zeros(le+ly, le)], Ts);
       
-rng default;              % For reproducibility
-dt = randi(T, 18, 1) + 1; % Generate random dwell-times
-t  = cumsum([-1; dt]);    % Sequence of impulse instants
-E  = {Eiqc, Esvar, Enom}; % Cell of synthesized estimators
 Et = {'Thm 3.3', 'Thm 3.4', 'hinfsyn'}; % This is for the legends
 
 % Several simulations
-for k = 1 : length(E)
+for k = [1, 3]
     % Build closed-loop
     cl = lft(sysm, E{k});
 
     for j = 1 : 2
         x = zeros(size(cl.a, 2), 1);  % Zero initial condition
         d = @(i) fun(i, j);           % Generalized disturbance
-        e = zeros(2*le, t(end));      % Estimation error
+        e = zeros(2*le, t(end));      % Output and estimate
         % Simulate response
         for i = 1 : t(end)
             if ~ismember(i, t) % Then the flow component is active
@@ -137,14 +177,10 @@ for k = 1 : length(E)
         figure
         subplot(3, 1, 1:2)
         box on; grid on;
-        plot(1:t(end), e(2:-1:1, :), '*')
+        plot(1:119, e(2:-1:1, 1:119), '*')
         legend('System output v', ['Estimate u by ', Et{k}])
         xlabel('time')
-
-        % Corresponding root mean square estimation errors
-        disp(['Root mean square estimation error with ', Et{k}, ' and '...
-              'd_', num2str(j), ': ', ...
-              num2str(sqrt(sum(abs(e(1, :) - e(2, :)).^2/t(end))))])
+        xlim([0, 120])
     end
 end
 
