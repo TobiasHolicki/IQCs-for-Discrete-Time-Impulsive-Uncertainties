@@ -7,7 +7,7 @@
 This repository contains the source code necessary to reproduce the numerical results from the article
 
 [Tobias Holicki and Carsten W. Scherer, **IQC Based Analysis and Estimator Design for Discrete-Time Systems
-Affected by Impulsive Uncertainties**,  ArXiV, 2022](https://doi.org/10.48550/arXiv.2212.08837))
+Affected by Impulsive Uncertainties**,  ArXiV, 2022](https://doi.org/10.48550/arXiv.2212.08837)
 
 ## Compatibility
 
